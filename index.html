@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Parser</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'parser/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Upload Your Resume</h1>
+        <input type="file" id="resume" accept=".pdf">
+        <button onclick="uploadResume()">Upload</button>
+
+        <h2>Extracted Data:</h2>
+        <pre id="result"></pre>
+    </div>
+
+    <script>
+        async function uploadResume() {
+            const fileInput = document.getElementById('resume');
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await fetch('/upload/', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+        }
+    </script>
+</body>
+</html>
